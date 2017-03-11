@@ -1,0 +1,132 @@
+<div xmlns:t="http://twistedmatrix.com/ns/twisted.web.template/0.1">
+
+  <div class="row">
+
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">System</div>
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 col-xs4">Power</div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 col-xs4">
+              <span id="power-standby">Standby</span>
+              <span id="power-active">Active</span>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 col-xs4">
+              <button id="main-on" onclick="atx_on();" type="button" class="btn btn-xs btn-success">Power On</button>
+              <button id="main-off" onclick="atx_off();" type="button" class="btn btn-xs btn-danger">Power Off</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">Node Temperature</div>
+        <div class="panel-body">
+
+          <div class="row">
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <div id="cluster"></div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <div class="row thick-row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">Node 4:</div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><span id="temp4"></span>&#x2103;</div>
+              </div>
+              <div class="row thick-row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">Node 3:</div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><span id="temp3"></span>&#x2103;</div>
+              </div>
+               <div class="row thick-row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">Node 2:</div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><span id="temp2"></span>&#x2103;</div>
+              </div>
+              <div class="row thick-row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">Node 1:</div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><span id="temp1"></span>&#x2103;</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Node Status</div>
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Node 1</div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <span class="btn btn-xs btn-danger" id="node1-stat-off">Offline</span>
+              <span class="btn btn-xs btn-warning" id="node1-stat-startup">Starting...</span>
+              <span class="btn btn-xs btn-success" id="node1-stat-on">Online</span>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <button id="node1-on"  onclick="node_on(1);" type="button" class="btn btn-xs btn-success">Power On</button>
+              <button id="node1-off" onclick="node_off(1);" type="button" class="btn btn-xs btn-danger">Power Off</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Node 2</div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <span class="btn btn-xs btn-danger" id="node2-stat-off">Offline</span>
+              <span class="btn btn-xs btn-warning" id="node2-stat-startup">Starting...</span>
+              <span class="btn btn-xs btn-success" id="node2-stat-on">Online</span>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <button id="node2-on"  onclick="node_on(2);" type="button" class="btn btn-xs btn-success">Power On</button>
+              <button id="node2-off" onclick="node_off(2);" type="button" class="btn btn-xs btn-danger">Power Off</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Node 3</div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <span class="btn btn-xs btn-danger" id="node3-stat-off">Offline</span>
+              <span class="btn btn-xs btn-warning" id="node3-stat-startup">Starting...</span>
+              <span class="btn btn-xs btn-success" id="node3-stat-on">Online</span>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <button id="node3-on"  onclick="node_on(3);" type="button" class="btn btn-xs btn-success">Power On</button>
+              <button id="node3-off" onclick="node_off(3);" type="button" class="btn btn-xs btn-danger">Power Off</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">Node 4</div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <span class="btn btn-xs btn-danger" id="node4-stat-off">Offline</span>
+              <span class="btn btn-xs btn-warning" id="node4-stat-startup">Starting...</span>
+              <span class="btn btn-xs btn-success" id="node4-stat-on">Online</span>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+              <button id="node4-on"  onclick="node_on(4);" type="button" class="btn btn-xs btn-success">Power On</button>
+              <button id="node4-off" onclick="node_off(4);" type="button" class="btn btn-xs btn-danger">Power Off</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="text/javascript" src="/static/js/konva.min.js"></script>
+  <script type="text/javascript" src="/static/js/tinycolor.min.js"></script>
+  <script type="text/javascript" src="/static/js/index.js"></script>
+  <script type="text/javascript">
+  //<![CDATA[
+    main_screen();
+  //]]>
+  </script>
+
+</div>
