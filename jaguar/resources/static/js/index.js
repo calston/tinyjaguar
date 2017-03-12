@@ -1,8 +1,8 @@
-function box3d(x, y, z, w, h, d, color) {
+function box3dB(x, y, z, w, h, d, color, opacity) {
   layer = new Konva.Layer();
 
-  var asp_y = 20;
-  var asp_x = 10;
+  var asp_y = d/5;
+  var asp_x = asp_y/2;
 
   var back = new Konva.Line({
     points: [
@@ -12,7 +12,7 @@ function box3d(x, y, z, w, h, d, color) {
       x, y+h
     ],
     fill: color,
-    opacity: 0.5,
+    opacity: opacity,
     stroke: 'black',
     strokeWidth: 1,
     closed : true
@@ -26,11 +26,41 @@ function box3d(x, y, z, w, h, d, color) {
       x+w+asp_x, y+h-asp_y
     ],
     fill: color,
-    opacity: 0.5,
+    opacity: opacity,
     stroke: 'black',
     strokeWidth: 1,
     closed : true
   });
+
+  var bottom = new Konva.Line({
+    points: [
+      x, y+h,
+      x+w+asp_x, y+h-asp_y,
+      x+w+d, y+h,
+      x+d-asp_x, y+h+asp_y,
+    ],
+    fill: color,
+    opacity: opacity,
+    stroke: 'black',
+    strokeWidth: 1,
+    closed : true
+  });
+
+
+  layer.add(back);
+  layer.add(right);
+  layer.add(bottom);
+
+  return layer;
+}
+
+
+
+function box3dF(x, y, z, w, h, d, color, opacity) {
+  layer = new Konva.Layer();
+
+  var asp_y = d/5;
+  var asp_x = asp_y/2;
 
   var left = new Konva.Line({
     points: [
@@ -40,7 +70,7 @@ function box3d(x, y, z, w, h, d, color) {
       x, y+h
     ],
     fill: color,
-    opacity: 0.5,
+    opacity: opacity,
     stroke: 'black',
     strokeWidth: 1,
     closed : true
@@ -54,7 +84,7 @@ function box3d(x, y, z, w, h, d, color) {
       x+d-asp_x, y+h+asp_y
     ],
     fill: color,
-    opacity: 0.5,
+    opacity: opacity,
     stroke: 'black',
     strokeWidth: 1,
     closed : true
@@ -68,15 +98,12 @@ function box3d(x, y, z, w, h, d, color) {
       x+d-asp_x, y+asp_y+asp_y
     ],
     fill: color,
-    opacity: 0.5,
+    opacity: opacity,
     stroke: 'black',
     strokeWidth: 1,
     closed : true
   });
 
-
-  layer.add(back);
-  layer.add(right);
   layer.add(left);
   layer.add(front);
   layer.add(btop);
@@ -84,11 +111,9 @@ function box3d(x, y, z, w, h, d, color) {
   return layer;
 }
 
-function draw_node(cluster, num, temp) {
-  // Draw some boxes
-
+function temp_to_color(temp) {
   if (temp > 0) {
-    var thue = 0.8 - (temp/80);
+    var thue = 0.8 - (temp/50);
 
     if (thue < 0.01) {
       thue = 0.01;
@@ -99,10 +124,21 @@ function draw_node(cluster, num, temp) {
   else {
     var color = "#222222"
   }
+  return color;
+}
+
+function draw_node(cluster, num, temp, cpu) {
+  // Draw some boxes
+
   var pos = 4 - num;
   var y = pos * 60;
 
-  cluster.add(box3d(1, y, 1, 100, 80, 100, color));
+  cluster.add(box3dB(1, y, 1, 100, 80, 100, temp_to_color(temp), 0.5));
+
+  //cluster.add(box3dB(30, y+40, 1, 30, 30, 30, temp_to_color(cpu), 1));
+  cluster.add(box3dF(30, y+40, 1, 30, 30, 30, temp_to_color(cpu), 1));
+
+  cluster.add(box3dF(1, y, 1, 100, 80, 100, temp_to_color(temp), 0.5));
 }
 
 function update_state() {
@@ -110,12 +146,13 @@ function update_state() {
     var cluster = new Konva.Stage({
       container: 'cluster',
       width: 300,
-      height: 350
+      height: 300
     });
 
     $.each(data, function(i, val) {
-      draw_node(cluster, val.node, val.temps.ambient);
+      draw_node(cluster, val.node, val.temps.ambient, val.temps.cpu);
       $("#temp"+ val.node).text(val.temps.ambient);
+      $("#cputemp"+ val.node).text(val.temps.cpu);
       if (val.state == 0) {
         $("#node" + val.node + "-stat-off").show();
         $("#node" + val.node + "-stat-startup").hide();

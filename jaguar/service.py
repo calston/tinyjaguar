@@ -188,19 +188,20 @@ class JaguarService(service.Service):
 
     @defer.inlineCallbacks
     def loop(self):
-        dl = defer.DeferredList([self.checkNode(i+1) for i in range(4)])
-
-        node_states = yield dl
+        node_states = []
+        for i in range(4):
+            state = yield self.checkNode(i+1)
+            node_states.append(state)
 
         cng = False
         for i, state in enumerate(node_states):
-            if state[1]:
-                reactor.callLater(0.1, self.checkMonitor, i+1)
+            if state:
+                yield self.checkMonitor(i+1)
 
                 if self.states[i] != 2:
                     self.states[i] = 2
                     cng = True
-            if not state[1]:
+            if not state:
                 self.states[i] = self.nodes[i].state
                 self.temps[i] = {'ambient': -1, 'cpu': -1}
 
@@ -217,7 +218,7 @@ class JaguarService(service.Service):
         root.putChild('api', web.API(self))
         root.putChild("static", File(FilePath('jaguar/resources/static').path))
 
-        site = server.Site(root)
+        site = server.Site(root, logPath='jaguar-access.log')
 
         reactor.listenTCP(80, site)
 
@@ -241,7 +242,7 @@ class JaguarService(service.Service):
             yield self.powerGood(gpio.LOW)
 
         self.t = task.LoopingCall(self.loop)
-        self.t.start(3.0)
+        self.t.start(5.0)
 
     def stopService(self):
         print "Shutdown" 
