@@ -1,0 +1,5 @@
+---
+- name: jaguar
+  hosts: jaguar
+  roles:
+    - default

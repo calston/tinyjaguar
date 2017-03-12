@@ -1,0 +1,18 @@
+---
+
+- apt:
+    name: libffi-dev
+    state: present
+
+- apt:
+    name: libssl-dev
+    state: present
+
+- apt:
+    name: python-pip
+    state: absent
+
+- easy_install:
+    name: pip
+    state: latest
+    executable: /usr/bin/easy_install
