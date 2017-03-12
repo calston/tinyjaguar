@@ -1,0 +1,9 @@
+---
+- name: master node packages
+  hosts: node1
+  gather_facts: no
+  vars_files:
+    - "vars/group_vars/all.yml"
+  roles:
+    - master
+    - jupyter

@@ -1,0 +1,9 @@
+[Unit]
+Description=ipcluster
+
+[Service]
+PIDFile=/var/run/ipcontroller.pid
+ExecStart=/usr/local/bin/ipcluster start --profile=jaguar
+
+[Install]
+WantedBy=multi-user.target

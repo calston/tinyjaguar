@@ -1,0 +1,10 @@
+---
+
+- apt:
+    name: tftpd-hpa
+    state: present
+
+- copy:
+    src: files/tftpd-hpa
+    dest: /etc/default/tftpd-hpa
+  notify: tftpd

@@ -1,0 +1,52 @@
+---
+
+- pip:
+    name: jupyter
+    state: present
+    executable: /usr/local/bin/pip3
+
+- apt:
+    name:
+      - npm
+      - nodejs-legacy
+    state: present
+
+- npm:
+    name: configurable-http-proxy
+    global: yes
+
+- pip:
+    name: jupyterhub
+    state: present
+    executable: /usr/local/bin/pip3
+
+- file:
+    path: /etc/jupyterhub
+    state: directory
+
+- copy:
+    src: files/jupyterhub_config.py
+    dest: /etc/jupyterhub/jupyterhub_config.py
+  register: jhubconfig
+
+- copy:
+    src: files/jupyterhub.service
+    dest: /etc/systemd/system/jupyterhub.service
+  register: jhubservice
+
+- copy:
+    src: files/jupyter
+    dest: /usr/local/etc/
+
+- shell: |
+    /bin/systemctl enable jupyterhub.service
+  when: jhubservice.changed
+
+- shell: |
+    /bin/systemctl restart jupyterhub.service
+  when: jhubconfig.changed or jhubservice.changed
+
+- copy:
+    src: files/ipython
+    dest: /share/
+  register: ipyconfigs

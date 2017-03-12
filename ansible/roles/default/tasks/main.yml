@@ -1,18 +1,43 @@
 ---
 
 - apt:
-    name: libffi-dev
-    state: present
-
-- apt:
-    name: libssl-dev
-    state: present
-
-- apt:
     name: python-pip
     state: absent
+
+- name: Base packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ base_packages }}"
+
+- stat:
+    path: /usr/local/bin/pip
+  register: pip_installed
 
 - easy_install:
     name: pip
     state: latest
     executable: /usr/bin/easy_install
+  when: pip_installed.stat.exists == False
+
+- stat:
+    path: /usr/local/bin/pip3
+  register: pip_installed
+
+- easy_install:
+    name: pip
+    state: latest
+    executable: /usr/bin/easy_install3
+  when: pip_installed.stat.exists == False
+
+- pip:
+    name: 
+      - mpi4py
+      - ipyparallel
+    state: present
+    executable: /usr/local/bin/pip3
+
+- file:
+    src: /share/ipython
+    dest: /root/.ipython
+    state: link

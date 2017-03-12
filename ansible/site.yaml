@@ -1,5 +1,25 @@
 ---
+- name: master node
+  hosts: node1
+  gather_facts: no
+  vars_files:
+    - "vars/group_vars/all.yml"
+  roles:
+    - tftp
+
 - name: jaguar
   hosts: jaguar
+  gather_facts: no
+  vars_files:
+    - "vars/group_vars/all.yml"
   roles:
     - default
+
+- name: master node packages
+  hosts: node1
+  gather_facts: no
+  vars_files:
+    - "vars/group_vars/all.yml"
+  roles:
+    - master
+    - jupyter
