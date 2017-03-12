@@ -33,6 +33,7 @@
 - pip:
     name: 
       - mpi4py
+      - pyopencl
       - ipyparallel
     state: present
     executable: /usr/local/bin/pip3
